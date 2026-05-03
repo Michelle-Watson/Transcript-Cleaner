@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 import NotFound from "@/pages/not-found";
 import { useState, useRef, useCallback } from "react";
-import { Upload, FileText, Clipboard, Download, CheckCheck, X, FileTerminal, AlertCircle } from "lucide-react";
+import { Upload, FileText, Clipboard, Download, CheckCheck, X, AlertCircle, WandSparkles } from "lucide-react";
 import { cleanTranscript } from "@/lib/cleanTranscript";
 import { ModeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
@@ -103,7 +103,7 @@ function TranscriptCleaner() {
       <header className="sticky top-0 z-10 bg-background/80 backdrop-blur-md border-b border-border/50 px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center shadow-sm">
-            <FileTerminal className="w-4 h-4 text-primary-foreground" />
+            <WandSparkles className="w-4 h-4 text-primary-foreground" />
           </div>
           <span className="font-semibold tracking-tight">TranscriptClean</span>
         </div>
@@ -228,7 +228,7 @@ function TranscriptCleaner() {
               className="h-9 gap-2 font-medium px-5"
               data-testid="button-clean"
             >
-              <FileTerminal className="w-4 h-4" />
+              <WandSparkles className="w-4 h-4" />
               Clean transcript
             </Button>
           </div>
