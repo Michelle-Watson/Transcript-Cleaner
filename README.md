@@ -176,7 +176,7 @@ The toolbar below the input area has three buttons:
 
 - On first visit, the app matches the system preference (dark or light).
 - Once the toggle is clicked, that choice is saved in the browser and persists across reloads, regardless of system settings.
-- The toggle is a single click — no dropdown.
+- The toggle is a single click — no dropdown. 
 
 ---
 
