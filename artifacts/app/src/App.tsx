@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 import NotFound from "@/pages/not-found";
 import { useState, useRef, useCallback } from "react";
-import { Upload, FileText, Clipboard, ClipboardPaste, Download, CheckCheck, X, AlertCircle, WandSparkles } from "lucide-react";
+import { Upload, FileText, Clipboard, ClipboardPaste, Download, CheckCheck, X, AlertCircle, WandSparkles, Trash2 } from "lucide-react";
 import { cleanTranscript } from "@/lib/cleanTranscript";
 import { ModeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
@@ -235,6 +235,21 @@ function TranscriptCleaner() {
                 <ClipboardPaste className="w-3.5 h-3.5" />
                 Paste
               </Button>
+              {inputText.trim() && (
+                <>
+                  <div className="w-px h-4 bg-border" />
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 text-xs font-medium gap-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                    onClick={handleClearFile}
+                    data-testid="button-clear"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    Clear
+                  </Button>
+                </>
+              )}
               <input
                 ref={fileInputRef}
                 type="file"

@@ -160,6 +160,18 @@ All transform steps are in `artifacts/app/src/lib/cleanTranscript.ts`. The funct
 
 ---
 
+## Input controls
+
+The toolbar below the input area has three buttons:
+
+| Button | What it does |
+|---|---|
+| **Choose file** | Opens a file picker — accepts `.vtt` and `.txt` files |
+| **Paste** | Reads text directly from the clipboard and fills the input in one click |
+| **Clear** | Resets the entire form — clears the input, output, and any loaded filename. Only appears once there is content in the input, so it cannot be clicked by accident on an empty form |
+
+---
+
 ## Dark mode behavior
 
 - On first visit, the app matches the system preference (dark or light).
