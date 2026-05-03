@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 import NotFound from "@/pages/not-found";
 import { useState, useRef, useCallback } from "react";
-import { Upload, FileText, Clipboard, Download, CheckCheck, X, AlertCircle, WandSparkles } from "lucide-react";
+import { Upload, FileText, Clipboard, ClipboardPaste, Download, CheckCheck, X, AlertCircle, WandSparkles } from "lucide-react";
 import { cleanTranscript } from "@/lib/cleanTranscript";
 import { ModeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
@@ -94,6 +94,22 @@ function TranscriptCleaner() {
     setError(null);
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
+
+  const handlePasteFromClipboard = useCallback(async () => {
+    try {
+      const text = await navigator.clipboard.readText();
+      if (!text.trim()) {
+        setError("Clipboard is empty.");
+        return;
+      }
+      setError(null);
+      setFileName(null);
+      setInputText(text.replace(/\r\n/g, "\n"));
+      setOutputText("");
+    } catch {
+      setError("Could not read clipboard. Try pasting directly into the text box.");
+    }
+  }, []);
 
   const inputWordCount = inputText ? inputText.split(/\s+/).filter(Boolean).length : 0;
   const outputWordCount = outputText ? outputText.split(/\s+/).filter(Boolean).length : 0;
@@ -208,6 +224,16 @@ function TranscriptCleaner() {
               >
                 <Upload className="w-3.5 h-3.5" />
                 Choose file
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-8 text-xs font-medium gap-1.5"
+                onClick={handlePasteFromClipboard}
+                data-testid="button-paste-clipboard"
+              >
+                <ClipboardPaste className="w-3.5 h-3.5" />
+                Paste
               </Button>
               <input
                 ref={fileInputRef}
