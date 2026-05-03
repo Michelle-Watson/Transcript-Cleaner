@@ -1,0 +1,57 @@
+Overview
+Build a single‑page Next.js application that cleans up meeting transcripts. Users can provide input by pasting text, dragging & dropping a .vtt/.txt file, or selecting a file manually. The app transforms the transcript (remove timestamps, fix punctuation, merge consecutive speaker lines) and shows the cleaned result. Users can copy the result to clipboard or download as .txt.
+
+Tech Stack
+
+Next.js 14 (App Router) with TypeScript
+
+Tailwind CSS v3 for styling (use class strategy for dark mode)
+
+All transcript processing runs client‑side in JavaScript (no server needed for logic)
+
+Use React state (useState, useEffect) for input/output management
+
+File reading via FileReader API
+
+Core Features & Behavior
+
+Input Methods
+
+Large <textarea> (monospace, resizable) for direct paste.
+
+Drag & drop directly onto the textarea (show a visual overlay when dragging).
+
+“Choose file” button opens file picker; accepts .vtt and .txt.
+
+When a file is dropped or selected, read its text content and populate the textarea.
+
+Display the file name below the button after selection.
+
+Cleaning Logic
+Triggered when user clicks “Clean transcript”. Apply the following transformations in order to the raw input:
+
+Remove timestamps: Delete any line containing --> (the VTT time range).
+
+Remove arrow markers: Specifically replace the sequence --> (arrow + space) with an empty string.
+
+Replace ellipses: Replace the … character (U+2026) with a comma ,.
+
+Merge consecutive speaker lines: Using the attached Python algorithm, but implemented in TypeScript:
+
+A line matches a speaker if it starts with Name: (word characters before colon).
+
+Consecutive lines from the same speaker are joined with a space.
+
+A blank line is inserted between different speakers.
+
+Lines without a speaker tag are appended to the current speaker’s paragraph.
+
+Preserve original line breaks where necessary for readability.
+
+Output
+
+Show cleaned transcript in a second (read‑only) textarea.
+
+“Copy cleaned text” button copies the content to clipboard using navigator.clipboard.writeText(). Show a brief “Copied!” tooltip/alert on success.
+
+“Download .txt” triggers a download of cleaned_transcript.txt using a blob URL.
