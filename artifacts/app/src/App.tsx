@@ -97,6 +97,8 @@ function TranscriptCleaner() {
 
   const inputWordCount = inputText ? inputText.split(/\s+/).filter(Boolean).length : 0;
   const outputWordCount = outputText ? outputText.split(/\s+/).filter(Boolean).length : 0;
+  const wordsRemoved = inputWordCount - outputWordCount;
+  const percentShorter = inputWordCount > 0 ? Math.round((wordsRemoved / inputWordCount) * 100) : 0;
 
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-200">
@@ -251,6 +253,11 @@ function TranscriptCleaner() {
                   <Badge variant="secondary" className="text-xs font-medium tabular-nums rounded-full px-2" data-testid="text-output-word-count">
                     {outputWordCount.toLocaleString()} words
                   </Badge>
+                  {wordsRemoved > 0 && (
+                    <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium tabular-nums" data-testid="text-reduction-stat">
+                      Removed {wordsRemoved.toLocaleString()} words ({percentShorter}% shorter)
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center gap-2">
                   <Button
