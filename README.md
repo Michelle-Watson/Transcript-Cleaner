@@ -2,8 +2,6 @@
 
 A single-page web app that cleans up meeting transcripts from `.vtt` or `.txt` files. Strips timestamps, removes formatting artifacts, replaces ellipses, and merges consecutive same-speaker lines into clean readable paragraphs.
 
-**Live app:** https://transcript-clean.replit.app (or your Vercel URL once deployed)
-
 ---
 
 ## What it does
@@ -15,20 +13,21 @@ WEBVTT
 
 1
 00:00:03.220 --> 00:00:21.379
-Ife Babatunde: All right, so thank you.
+Michelle Watson: All right, so thank you.
 
 2
 00:00:21.380 --> 00:00:27.389
-Ife Babatunde: We started out as this extensive framework.
+Michelle Watson: We started out as this extensive framework.
 ```
 
 It produces clean, readable text:
 
 ```
-Ife Babatunde: All right, so thank you. We started out as this extensive framework.
+Michelle Watson: All right, so thank you. We started out as this extensive framework.
 ```
 
 Transforms applied (in order):
+
 1. Normalize Windows line endings (`\r\n` → `\n`)
 2. Remove `WEBVTT` header
 3. Remove cue index lines (lone digits like `1`, `2`, `3`)
@@ -36,7 +35,7 @@ Transforms applied (in order):
 5. Remove stray `-->` arrows
 6. Replace `…` (U+2026) and `...` with `,`
 7. Strip blank lines
-8. Merge consecutive lines from the same speaker into one paragraph, separated from other speakers by a blank line
+8. Merge consecutive lines from the same speaker into one paragraph, with a blank line between different speakers
 
 ---
 
@@ -45,9 +44,9 @@ Transforms applied (in order):
 ```
 /
 ├── artifacts/
-│   ├── app/                        ← The actual web app (deploy this)
+│   ├── app/                        ← The web app (this is what gets deployed)
 │   │   ├── public/
-│   │   │   ├── favicon.svg         ← Browser tab icon (indigo document+wand)
+│   │   │   ├── favicon.svg         ← Browser tab icon (indigo document + wand)
 │   │   │   └── opengraph.jpg       ← Social share preview image
 │   │   ├── src/
 │   │   │   ├── App.tsx             ← Entire UI: header, input, output, drag-drop
@@ -56,7 +55,7 @@ Transforms applied (in order):
 │   │   │   │   └── cleanTranscript.ts  ← All cleaning logic lives here
 │   │   │   └── components/
 │   │   │       ├── theme-provider.tsx  ← Dark mode context + localStorage sync
-│   │   │       ├── ThemeToggle.tsx     ← Sun/moon toggle button in header
+│   │   │       ├── ThemeToggle.tsx     ← Sun/moon click toggle in header
 │   │   │       └── ui/             ← shadcn/ui components (Button, Textarea, etc.)
 │   │   ├── index.html              ← Page title + favicon reference
 │   │   ├── package.json
@@ -71,7 +70,7 @@ Transforms applied (in order):
 └── pnpm-workspace.yaml
 ```
 
-The app you care about lives entirely in **`artifacts/app/`**. Everything else in the repo is scaffolding from the Replit monorepo template.
+The app lives entirely in **`artifacts/app/`**. Everything else is scaffolding from the Replit monorepo template.
 
 ---
 
@@ -80,32 +79,30 @@ The app you care about lives entirely in **`artifacts/app/`**. Everything else i
 Requires [Node.js 20+](https://nodejs.org) and [pnpm](https://pnpm.io).
 
 ```bash
-# Install dependencies (run from repo root — required for workspace packages)
+# Install from the repo root — required for workspace packages
 pnpm install
 
 # Start the dev server
 pnpm --filter @workspace/app run dev
 ```
 
-Open http://localhost:PORT (the port printed in the terminal).
+The terminal will print the local URL to open.
 
 ---
 
 ## Deploying to Vercel
 
-Vercel is importing from your GitHub repo. Here is exactly what to fill in:
+When importing the GitHub repo into Vercel, use these settings:
 
 | Field | Value |
 |---|---|
-| **Project Name** | Anything you like — e.g. `transcript-clean`. This becomes the URL slug (`transcript-clean.vercel.app`). |
-| **Root Directory** | Leave **blank** (the repo root `/`). Do NOT set it to `artifacts/app` or `artifacts/api-server`. pnpm needs to install from the root to resolve workspace packages. |
-| **Framework Preset** | **Other** (or Vite — either works, but you'll override the commands below) |
+| **Project Name** | Anything — e.g. `transcript-clean`. Sets the URL slug (`transcript-clean.vercel.app`). |
+| **Root Directory** | Leave **blank** (repo root). Do not point it at a subdirectory — pnpm must install from the root to resolve workspace packages. |
+| **Framework Preset** | **Other** |
 | **Build Command** | `pnpm --filter @workspace/app run build` |
 | **Output Directory** | `artifacts/app/dist/public` |
 | **Install Command** | `pnpm install` |
-| **Environment Variables** | None needed — all processing is client-side |
-
-> **Important:** The screenshot shows `artifacts/api-server` as the root directory and "Express" as the framework. Both are wrong — click **Edit** on Root Directory and clear it to `/` (blank).
+| **Environment Variables** | None — all processing is client-side |
 
 ---
 
@@ -113,10 +110,9 @@ Vercel is importing from your GitHub repo. Here is exactly what to fill in:
 
 ### Change the browser tab icon (favicon)
 
-Edit `artifacts/app/public/favicon.svg`. It's a plain SVG file — change the fill color, shapes, or replace it entirely with a `.png` or `.ico` by updating the `<link rel="icon">` line in `artifacts/app/index.html`.
+Edit `artifacts/app/public/favicon.svg`. It is a plain SVG file — change the fill color, shapes, or swap it for a `.png` by updating the `<link rel="icon">` tag in `artifacts/app/index.html`:
 
 ```html
-<!-- artifacts/app/index.html -->
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <!-- or for a PNG: -->
 <link rel="icon" type="image/png" href="/favicon.png" />
@@ -132,10 +128,10 @@ In `artifacts/app/src/App.tsx`, find the header section:
 </div>
 ```
 
-Replace `WandSparkles` with any [Lucide icon](https://lucide.dev/icons/) — just import it at the top of the file:
+Replace `WandSparkles` with any [Lucide icon](https://lucide.dev/icons/) and update the import at the top of the file:
 
 ```tsx
-import { FileCheck2 } from "lucide-react"; // example
+import { FileCheck2 } from "lucide-react";
 ```
 
 ### Change the page title
@@ -148,7 +144,7 @@ Edit `artifacts/app/index.html`:
 
 ### Change the color scheme
 
-Edit `artifacts/app/src/index.css`. The `:root` block controls light mode, `.dark` controls dark mode. All values are space-separated HSL:
+Edit `artifacts/app/src/index.css`. The `:root` block controls light mode, `.dark` controls dark mode. Values are space-separated HSL:
 
 ```css
 :root {
@@ -161,6 +157,14 @@ Edit `artifacts/app/src/index.css`. The `:root` block controls light mode, `.dar
 ### Modify the cleaning logic
 
 All transform steps are in `artifacts/app/src/lib/cleanTranscript.ts`. The function takes a raw string and returns the cleaned string. Add, remove, or reorder steps inside that file.
+
+---
+
+## Dark mode behavior
+
+- On first visit, the app matches the system preference (dark or light).
+- Once the toggle is clicked, that choice is saved in the browser and persists across reloads, regardless of system settings.
+- The toggle is a single click — no dropdown.
 
 ---
 
