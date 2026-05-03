@@ -1,0 +1,22 @@
+kind = "design"
+previewPath = "/transcript-cleaner/"
+title = "Transcript Cleaner"
+version = "1.0.0"
+id = "artifacts/transcript-cleaner"
+router = "path"
+
+[[integratedSkills]]
+name = "mockup-sandbox"
+version = "1.0.0"
+
+[[services]]
+name = "Component Preview Server"
+paths = [ "/transcript-cleaner/" ]
+localPort = 25708
+
+[services.development]
+run = "npm run dev"
+
+[services.env]
+PORT = "25708"
+BASE_PATH = "/transcript-cleaner/"

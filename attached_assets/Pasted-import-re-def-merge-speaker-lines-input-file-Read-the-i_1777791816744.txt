@@ -1,0 +1,81 @@
+import re
+
+
+def merge_speaker_lines(input_file):
+    # Read the input file
+    with open(input_file, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+
+    # Pattern to match speaker names (e.g., "Name: ")
+    speaker_pattern = re.compile(r'^(.+?):\s')
+
+    merged_lines = []
+    current_speaker = None
+    current_content = []
+    previous_speaker = None
+
+    for line in lines:
+        line = line.strip()
+        if not line:  # Skip empty lines
+            continue
+
+        # Check if this line starts with a speaker tag
+        match = speaker_pattern.match(line)
+        if match:
+            speaker = match.group(1)
+            content = line[match.end():].strip()
+
+            # If we have a current speaker and it's the same, accumulate content
+            if current_speaker == speaker:
+                current_content.append(content)
+            else:
+                # Save the previous speaker's content (if any)
+                if current_speaker is not None:
+                    merged_line = f"{current_speaker}: {' '.join(current_content)}"
+                    merged_lines.append(merged_line)
+
+                    # Add empty line between different speakers
+                    if speaker != current_speaker:
+                        merged_lines.append('')
+
+                # Start new speaker
+                current_speaker = speaker
+                current_content = [content]
+        else:
+            # If no speaker tag, add to current content (continuation of previous line)
+            if current_speaker is not None:
+                current_content.append(line)
+
+    # Add the last speaker's content
+    if current_speaker is not None:
+        merged_line = f"{current_speaker}: {' '.join(current_content)}"
+        merged_lines.append(merged_line)
+
+    # Create output filename
+    if input_file.endswith('.txt'):
+        output_file = input_file.replace('.txt', '_merged.txt')
+    else:
+        output_file = input_file + '_merged.txt'
+
+    # Write output file
+    with open(output_file, 'w', encoding='utf-8') as f:
+        f.write('\n'.join(merged_lines))
+
+    return output_file
+
+
+def main():
+    input_file = "transcript.txt"
+    # input_file = input("Enter the path to the transcript file: ") # transcript.txt
+
+    try:
+        output_file = merge_speaker_lines(input_file)
+        print(f"Success! Merged transcript saved as: {output_file}")
+    except FileNotFoundError:
+        print(f"Error: File '{input_file}' not found.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
+if __name__ == "__main__":
+    main()
